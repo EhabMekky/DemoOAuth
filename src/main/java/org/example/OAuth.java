@@ -4,6 +4,9 @@ import Pojo.GetCourse;
 import Pojo.Mobile;
 import Pojo.WebAutomation;
 import io.restassured.path.json.JsonPath;
+
+import java.util.List;
+
 import static io.restassured.RestAssured.given;
 
 public class OAuth {
@@ -44,5 +47,19 @@ public class OAuth {
             sum += mobile.getPrice();
         }
         System.out.println(sum);
+
+        List<Api> apiCourses = gc.getCourses().getApi();
+        for (Api apiCours : apiCourses) {
+            if (apiCours.getCourseTitle().equals("Rest Assured Automation using Java")) {
+                System.out.println(apiCours.getPrice());
+                break;
+            } else {
+                System.out.println("Not found");
+            }
+        }
+
+        for(WebAutomation webAutomation : gc.getCourses().getWebAutomation()) {
+            System.out.println(webAutomation.getCourseTitle());
+        }
     }
 }
