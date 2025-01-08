@@ -4,6 +4,7 @@ import Pojo.GetCourse;
 import Pojo.Mobile;
 import Pojo.WebAutomation;
 import io.restassured.path.json.JsonPath;
+import org.testng.Assert;
 
 import java.util.List;
 
@@ -11,6 +12,7 @@ import static io.restassured.RestAssured.given;
 
 public class OAuth {
     public static void main(String[] args) {
+        String[] courseTitles = {"Selenium Webdriver Java", "Cypress", "Protractor"};
 
         // Given
         // When
@@ -61,5 +63,7 @@ public class OAuth {
         for(WebAutomation webAutomation : gc.getCourses().getWebAutomation()) {
             System.out.println(webAutomation.getCourseTitle());
         }
+        Assert.assertEquals(gc.getCourses().getWebAutomation().getFirst().getCourseTitle(), courseTitles[0]);
+
     }
 }
