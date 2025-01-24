@@ -4,6 +4,8 @@ import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.specification.RequestSpecification;
+import org.testng.Assert;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +68,7 @@ public class ECommerceAPITest {
         orderDetails.setCountry("Egypt");
         orderDetails.setProductOrderedId(orderProductId);
 
-        List<OrderDetails> orderDetailsList = new ArrayList<OrderDetails>();
+        List<OrderDetails> orderDetailsList = new ArrayList<>();
         orderDetailsList.add(orderDetails);
 
         Orders order = new Orders();
@@ -85,5 +87,22 @@ public class ECommerceAPITest {
                 .then().log().all().extract().response().asString();
 
         System.out.println(orderResponse);
+
+        // Delete Product
+        RequestSpecification deleteProductBaseReq = new RequestSpecBuilder()
+                .setBaseUri("https://rahulshettyacademy.com")
+                .addHeader("Authorization", token)
+                .setContentType(ContentType.JSON)
+                .build();
+
+        RequestSpecification deleteProductReq = given().log().all().spec(deleteProductBaseReq)
+                .pathParams("productId", productId);
+
+        String deleteProductResponse = deleteProductReq.when().delete("/api/ecom/product/delete-product/{productId}")
+                .then().log().all().assertThat().statusCode(200).extract().response().asString();
+
+        JsonPath js1 = new JsonPath(deleteProductResponse);
+        System.out.println(js1.getString("message"));
+        Assert.assertEquals(js1.getString("message"), "Product Deleted Successfully");
     }
 }
