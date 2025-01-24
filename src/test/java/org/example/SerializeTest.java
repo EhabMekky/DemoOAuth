@@ -20,6 +20,5 @@ public class SerializeTest {
                 .then().assertThat().statusCode(200).extract().response();
 
         System.out.println("Serialization" + response.asString());
-
     }
 }
